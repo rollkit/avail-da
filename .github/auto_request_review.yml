@@ -3,7 +3,7 @@ reviewers:
     - code-owners
   groups:
     code-owners:
-      - Nashqueue
+      - Manav-Aggarwal
       - tzdybal
       - gupadhyaya
     rollkit:
@@ -15,15 +15,18 @@ reviewers:
       - sysrex
       - jrmanes
       - Bidon15
+      - MSevey
     celestia:
       - team:celestia
 files:
-  '**':
+  "**":
     - code-owners
     - rollkit
-  '**/*Dockerfile':
+  "**/*Dockerfile":
+    - code-owners
     - devops
-  '.github/**':
+  ".github/**":
+    - code-owners
     - devops
 options:
   ignore_draft: true
