@@ -1,6 +1,8 @@
 module github.com/rollkit/avail-da
 
-go 1.20
+go 1.21.1
+
+toolchain go1.21.5
 
 require (
 	github.com/rollkit/go-da v0.0.0-20231024133951-57bc36006772
