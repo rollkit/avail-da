@@ -14,10 +14,12 @@ import (
 	"net/url"
 )
 
+// SubmitRequest represents a request to submit data.
 type SubmitRequest struct {
 	Data string `json:"data"`
 }
 
+// SubmitResponse represents the response after submitting data.
 type SubmitResponse struct {
 	BlockNumber      uint32 `json:"block_number"`
 	BlockHash        string `json:"block_hash"`
@@ -25,21 +27,25 @@ type SubmitResponse struct {
 	TransactionIndex uint32 `json:"index"`
 }
 
+// BlocksResponse represents the structure of a response containing block information.
 type BlocksResponse struct {
 	BlockNumber      uint32             `json:"block_number"`
 	DataTransactions []DataTransactions `json:"data_transactions"`
 }
 
+// DataTransactions represents data transactions within a block.
 type DataTransactions struct {
 	Data      string `json:"data"`
 	Extrinsic string `json:"extrinsic"`
 }
 
+// Config represents the configuration structure.
 type Config struct {
 	AppID uint32 `json:"app_ID"`
 	LcURL string `json:"lc_url"`
 }
 
+// BlockURL represents the URL pattern for retrieving data and extrinsic information
 const BlockURL = "/blocks/%d/data?fields=data,extrinsic"
 
 // AvailDA implements the avail backend for the DA interface
@@ -141,6 +147,7 @@ func (c *AvailDA) Get(ids []da.ID) ([]da.Blob, error) {
 	return blobs, nil
 }
 
+// GetIDs returns the ID
 func (c *AvailDA) GetIDs(height uint64) ([]da.ID, error) {
 	// todo:currently returning height as ID, need to extend avail-light api
 	ids := make([]byte, 8)
