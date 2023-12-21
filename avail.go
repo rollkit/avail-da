@@ -142,7 +142,7 @@ func (c *AvailDA) Get(ids []da.ID) ([]da.Blob, error) {
 }
 
 func (c *AvailDA) GetIDs(height uint64) ([]da.ID, error) {
-	//todo:currently returning height as ID, need to extend avail-light api
+	// todo:currently returning height as ID, need to extend avail-light api
 	ids := make([]byte, 8)
 	binary.BigEndian.PutUint64(ids, height)
 	return [][]byte{ids}, nil
