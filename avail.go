@@ -64,7 +64,7 @@ func NewAvailDA(config Config, ctx context.Context) *AvailDA {
 
 var _ da.DA = &AvailDA{}
 
-// submits each blob to avail data availability layer
+// Submit each blob to avail data availability layer
 func (c *AvailDA) Submit(daBlobs []da.Blob) ([]da.ID, []da.Proof, error) {
 	ids := make([]da.ID, len(daBlobs))
 	for index, blob := range daBlobs {
