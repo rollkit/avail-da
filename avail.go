@@ -6,12 +6,15 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"encoding/json"
-	"fmt"
-	"github.com/rollkit/go-da"
+
 	"io"
 	"log"
 	"net/http"
 	"net/url"
+
+	"fmt"
+
+	"github.com/rollkit/go-da"
 )
 
 // SubmitRequest represents a request to submit data.
