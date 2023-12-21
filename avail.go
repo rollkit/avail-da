@@ -75,7 +75,10 @@ func (c *AvailDA) Submit(daBlobs []da.Blob) ([]da.ID, []da.Proof, error) {
 		if err != nil {
 			return nil, nil, err
 		}
-		defer response.Body.Close()
+
+		defer func() {
+			_ = response.Body.Close()
+		}()
 
 		responseData, err := io.ReadAll(response.Body)
 		if err != nil {
