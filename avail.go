@@ -89,7 +89,7 @@ func (c *AvailDA) Submit(daBlobs []da.Blob) ([]da.ID, []da.Proof, error) {
 		}
 		ids[index] = makeID(submitResponse.BlockNumber)
 	}
-	fmt.Println("succesfully submitted blobs to avail")
+	fmt.Println("successfully submitted blobs to avail")
 	return ids, nil, nil
 }
 
