@@ -77,7 +77,10 @@ func (c *AvailDA) Submit(daBlobs []da.Blob) ([]da.ID, []da.Proof, error) {
 		}
 
 		defer func() {
-			_ = response.Body.Close()
+			err = response.Body.Close()
+			if err != nil {
+				return nil, nil, err
+			}
 		}()
 
 		responseData, err := io.ReadAll(response.Body)
@@ -117,7 +120,10 @@ func (c *AvailDA) Get(ids []da.ID) ([]da.Blob, error) {
 			return nil, err
 		}
 		defer func() {
-			_ = response.Body.Close()
+			err = response.Body.Close()
+			if err != nil {
+				return nil, nil, err
+			}
 		}()
 		responseData, err := io.ReadAll(response.Body)
 		if err != nil {
