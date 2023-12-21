@@ -7,11 +7,11 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"github.com/rollkit/go-da"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
-
-	"github.com/rollkit/go-da"
 )
 
 type SubmitRequest struct {
@@ -79,7 +79,7 @@ func (c *AvailDA) Submit(daBlobs []da.Blob) ([]da.ID, []da.Proof, error) {
 		defer func() {
 			err = response.Body.Close()
 			if err != nil {
-				return nil, nil, err
+				log.Println("error closing response body", err)
 			}
 		}()
 
@@ -122,7 +122,7 @@ func (c *AvailDA) Get(ids []da.ID) ([]da.Blob, error) {
 		defer func() {
 			err = response.Body.Close()
 			if err != nil {
-				return nil, nil, err
+				log.Println("error closing response body", err)
 			}
 		}()
 		responseData, err := io.ReadAll(response.Body)
