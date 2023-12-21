@@ -7,12 +7,11 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"github.com/rollkit/go-da"
 	"io"
 	"log"
 	"net/http"
 	"net/url"
-
-	"github.com/rollkit/go-da"
 )
 
 type SubmitRequest struct {
