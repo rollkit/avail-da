@@ -70,6 +70,7 @@ var _ da.DA = &AvailDA{}
 // Submit each blob to avail data availability layer
 func (c *AvailDA) Submit(daBlobs []da.Blob) ([]da.ID, []da.Proof, error) {
 	ids := make([]da.ID, len(daBlobs))
+	proofs := make([]da.Proof, len(daBlobs))
 	for index, blob := range daBlobs {
 		encodedBlob := base64.StdEncoding.EncodeToString(blob)
 		requestData := SubmitRequest{
@@ -84,28 +85,26 @@ func (c *AvailDA) Submit(daBlobs []da.Blob) ([]da.ID, []da.Proof, error) {
 		if err != nil {
 			return nil, nil, err
 		}
-
 		defer func() {
 			err = response.Body.Close()
 			if err != nil {
 				log.Println("error closing response body", err)
 			}
 		}()
-
 		responseData, err := io.ReadAll(response.Body)
 		if err != nil {
 			return nil, nil, err
 		}
-
 		var submitResponse SubmitResponse
 		err = json.Unmarshal(responseData, &submitResponse)
 		if err != nil {
 			return nil, nil, err
 		}
 		ids[index] = makeID(submitResponse.BlockNumber)
+		proofs[index] = makeProofs(submitResponse.TransactionHash)
 	}
 	fmt.Println("successfully submitted blobs to avail")
-	return ids, nil, nil
+	return ids, proofs, nil
 }
 
 // Get returns Blob for each given ID, or an error
@@ -144,7 +143,8 @@ func (c *AvailDA) Get(ids []da.ID) ([]da.Blob, error) {
 			return nil, err
 		}
 		for _, dataTransaction := range blocksObject.DataTransactions {
-			blobs = append(blobs, []byte(dataTransaction.Data))
+			decodeStr, _ := base64.StdEncoding.DecodeString(dataTransaction.Data)
+			blobs = append(blobs, []byte(string(decodeStr)))
 		}
 	}
 	return blobs, nil
@@ -173,4 +173,8 @@ func makeID(blockNumber uint32) da.ID {
 	id := make([]byte, 8)
 	binary.BigEndian.PutUint32(id, blockNumber)
 	return id
+}
+
+func makeProofs(proofs string) da.ID {
+	return []byte(proofs)
 }
