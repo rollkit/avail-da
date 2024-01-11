@@ -17,11 +17,18 @@ func TestMain(m *testing.M) {
 	mux.HandleFunc("/v2/blocks/", mockGetEndpoint)
 	mux.HandleFunc("/v2/submit", mockSubmitEndpoint)
 
+	server := &http.Server{
+		Addr:         ":9000",
+		Handler:      mux,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}
+
 	// Start the server
 	go func() {
 		fmt.Println("Mock Server is running on :9000")
-		err := http.ListenAndServe(":9000", mux)
-		if err != nil {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			fmt.Printf("Error starting mock server: %v\n", err)
 		}
 	}()

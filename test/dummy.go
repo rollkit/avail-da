@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type BlocksResponse struct {
@@ -56,7 +57,11 @@ func mockGetEndpoint(w http.ResponseWriter, r *http.Request) {
 			},
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		err := json.NewEncoder(w).Encode(response)
+		if err != nil {
+			http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+			return
+		}
 	} else if blockNo == 43 {
 		response := BlocksResponse{
 			BlockNumber: uint32(blockNo),
@@ -68,7 +73,11 @@ func mockGetEndpoint(w http.ResponseWriter, r *http.Request) {
 			},
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		err := json.NewEncoder(w).Encode(response)
+		if err != nil {
+			http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+			return
+		}
 	} else if blockNo == 44 {
 		response := BlocksResponse{
 			BlockNumber: uint32(blockNo),
@@ -80,7 +89,11 @@ func mockGetEndpoint(w http.ResponseWriter, r *http.Request) {
 			},
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		err := json.NewEncoder(w).Encode(response)
+		if err != nil {
+			http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+			return
+		}
 	}
 }
 
@@ -102,7 +115,11 @@ func mockSubmitEndpoint(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(response)
+		err := json.NewEncoder(w).Encode(response)
+		if err != nil {
+			http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+			return
+		}
 	} else if submitReq.Data == "TW9ja2VkRGF0YTI=" {
 		response := SubmitResponse{
 			BlockNumber:      43,
@@ -112,7 +129,11 @@ func mockSubmitEndpoint(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(response)
+		err := json.NewEncoder(w).Encode(response)
+		if err != nil {
+			http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+			return
+		}
 	} else if submitReq.Data == "TW9ja2VkRGF0YTM=" {
 		response := SubmitResponse{
 			BlockNumber:      44,
@@ -122,7 +143,11 @@ func mockSubmitEndpoint(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(response)
+		err := json.NewEncoder(w).Encode(response)
+		if err != nil {
+			http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+			return
+		}
 	}
 }
 
@@ -131,11 +156,19 @@ func StartMockServer() {
 	mux.HandleFunc("/v2/blocks/", mockGetEndpoint)
 	mux.HandleFunc("/v2/submit", mockSubmitEndpoint)
 
+	// Create an HTTP server with timeouts
+	server := &http.Server{
+		Addr:         ":9000",
+		Handler:      mux,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}
+
 	// Start the server
 	go func() {
 		fmt.Println("Mock Server is running on :9000")
-		err := http.ListenAndServe(":9000", mux)
-		if err != nil {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			fmt.Printf("Error starting mock server: %v\n", err)
 		}
 	}()

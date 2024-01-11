@@ -52,7 +52,11 @@ type Config struct {
 
 // BlockURL represents the URL pattern for retrieving data and extrinsic information
 const BlockURL = "/blocks/%d/data?fields=data,extrinsic"
+
+// BlockNotFound represents the string indicating that a block is not found.
 const BLOCK_NOT_FOUND = "\"Not found\""
+
+// PROCESSING_BLOCK represents the string indicating that a block is still being processed.
 const PROCESSING_BLOCK = "\"Processing block\""
 
 // AvailDA implements the avail backend for the DA interface
@@ -71,9 +75,9 @@ func NewAvailDA(config Config, ctx context.Context) *AvailDA {
 
 var _ da.DA = &AvailDA{}
 
+// MaxBlobSize returns the max blob size
 func (c *AvailDA) MaxBlobSize() (uint64, error) {
-	var maxBlobSize uint64
-	maxBlobSize = 64 * 64 * 500
+	var maxBlobSize uint64 = 64 * 64 * 500
 	return maxBlobSize, nil
 }
 
