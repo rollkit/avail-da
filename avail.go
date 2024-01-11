@@ -6,6 +6,8 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"encoding/json"
+	"sync"
+	"time"
 
 	"io"
 	"log"
@@ -50,6 +52,8 @@ type Config struct {
 
 // BlockURL represents the URL pattern for retrieving data and extrinsic information
 const BlockURL = "/blocks/%d/data?fields=data,extrinsic"
+const BLOCK_NOT_FOUND = "\"Not found\""
+const PROCESSING_BLOCK = "\"Processing block\""
 
 // AvailDA implements the avail backend for the DA interface
 type AvailDA struct {
@@ -67,42 +71,98 @@ func NewAvailDA(config Config, ctx context.Context) *AvailDA {
 
 var _ da.DA = &AvailDA{}
 
+func (c *AvailDA) MaxBlobSize() (uint64, error) {
+	var maxBlobSize uint64
+	maxBlobSize = 64 * 64 * 500
+	return maxBlobSize, nil
+}
+
 // Submit each blob to avail data availability layer
 func (c *AvailDA) Submit(daBlobs []da.Blob) ([]da.ID, []da.Proof, error) {
-	ids := make([]da.ID, len(daBlobs))
-	proofs := make([]da.Proof, len(daBlobs))
-	for index, blob := range daBlobs {
-		encodedBlob := base64.StdEncoding.EncodeToString(blob)
-		requestData := SubmitRequest{
-			Data: encodedBlob,
-		}
-		requestBody, err := json.Marshal(requestData)
-		if err != nil {
-			return nil, nil, err
-		}
-		// Make a POST request to the /v2/submit endpoint.
-		response, err := http.Post(c.config.LcURL+"/submit", "application/json", bytes.NewBuffer(requestBody))
-		if err != nil {
-			return nil, nil, err
-		}
-		defer func() {
-			err = response.Body.Close()
-			if err != nil {
-				log.Println("error closing response body", err)
+	resultChan := make(chan SubmitResponse, len(daBlobs))
+	errorChan := make(chan error, len(daBlobs))
+
+	var wg sync.WaitGroup
+
+	var mu sync.Mutex
+
+	for _, blob := range daBlobs {
+		wg.Add(1)
+
+		// Start a goroutine for each blob
+		go func(blob da.Blob) {
+			defer wg.Done()
+			encodedBlob := base64.StdEncoding.EncodeToString(blob)
+			requestData := SubmitRequest{
+				Data: encodedBlob,
 			}
-		}()
-		responseData, err := io.ReadAll(response.Body)
-		if err != nil {
-			return nil, nil, err
-		}
-		var submitResponse SubmitResponse
-		err = json.Unmarshal(responseData, &submitResponse)
-		if err != nil {
-			return nil, nil, err
-		}
-		ids[index] = makeID(submitResponse.BlockNumber)
-		proofs[index] = makeProofs(submitResponse.TransactionHash)
+
+			requestBody, err := json.Marshal(requestData)
+			if err != nil {
+				errorChan <- err
+				return
+			}
+
+			// Make a POST request to the /v2/submit endpoint.
+			response, err := http.Post(c.config.LcURL+"/submit", "application/json", bytes.NewBuffer(requestBody))
+			if err != nil {
+				errorChan <- err
+				return
+			}
+
+			defer func() {
+				err = response.Body.Close()
+				if err != nil {
+					log.Println("error closing response body", err)
+				}
+			}()
+
+			responseData, err := io.ReadAll(response.Body)
+			if err != nil {
+				errorChan <- err
+				return
+			}
+
+			var submitResponse SubmitResponse
+			err = json.Unmarshal(responseData, &submitResponse)
+			if err != nil {
+				errorChan <- err
+				return
+			}
+
+			// Acquire the mutex before updating slices
+			mu.Lock()
+			resultChan <- SubmitResponse{
+				BlockNumber:      submitResponse.BlockNumber,
+				BlockHash:        submitResponse.BlockHash,
+				TransactionHash:  submitResponse.TransactionHash,
+				TransactionIndex: submitResponse.TransactionIndex,
+			}
+			mu.Unlock()
+
+		}(blob)
 	}
+
+	go func() {
+		wg.Wait()
+		close(resultChan)
+		close(errorChan)
+	}()
+
+	// Collect results from channels
+	var ids []da.ID
+	var proofs []da.Proof
+
+	for result := range resultChan {
+		ids = append(ids, makeID(result.BlockNumber))
+		proofs = append(proofs, makeProofs(result.TransactionHash))
+	}
+
+	// Check for errors
+	if err := <-errorChan; err != nil {
+		return nil, nil, err
+	}
+
 	fmt.Println("successfully submitted blobs to avail")
 	return ids, proofs, nil
 }
@@ -112,12 +172,14 @@ func (c *AvailDA) Get(ids []da.ID) ([]da.Blob, error) {
 	var blobs [][]byte
 	var blockNumber uint32
 	for _, id := range ids {
+	Loop:
 		blockNumber = binary.BigEndian.Uint32(id)
 		blocksURL := fmt.Sprintf(c.config.LcURL+BlockURL, blockNumber)
 		parsedURL, err := url.Parse(blocksURL)
 		if err != nil {
 			return nil, err
 		}
+		time.Sleep(10 * time.Second)
 		req, err := http.NewRequest("GET", parsedURL.String(), nil)
 		if err != nil {
 			return nil, err
@@ -138,9 +200,15 @@ func (c *AvailDA) Get(ids []da.ID) ([]da.Blob, error) {
 			return nil, err
 		}
 		var blocksObject BlocksResponse
-		err = json.Unmarshal(responseData, &blocksObject)
-		if err != nil {
-			return nil, err
+		if string(responseData) == BLOCK_NOT_FOUND {
+			blocksObject = BlocksResponse{BlockNumber: blockNumber, DataTransactions: []DataTransactions{}}
+		} else if string(responseData) == PROCESSING_BLOCK {
+			goto Loop
+		} else {
+			err = json.Unmarshal(responseData, &blocksObject)
+			if err != nil {
+				return nil, err
+			}
 		}
 		for _, dataTransaction := range blocksObject.DataTransactions {
 			decodeStr, _ := base64.StdEncoding.DecodeString(dataTransaction.Data)
@@ -153,8 +221,9 @@ func (c *AvailDA) Get(ids []da.ID) ([]da.Blob, error) {
 // GetIDs returns the ID
 func (c *AvailDA) GetIDs(height uint64) ([]da.ID, error) {
 	// todo:currently returning height as ID, need to extend avail-light api
+	heightAsUint32 := uint32(height)
 	ids := make([]byte, 8)
-	binary.BigEndian.PutUint64(ids, height)
+	binary.BigEndian.PutUint32(ids, heightAsUint32)
 	return [][]byte{ids}, nil
 }
 
