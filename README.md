@@ -41,9 +41,9 @@ The implementation calls [Submit](https://github.com/availproject/avail-light/bl
 
 ## Avail-Light installation for local development Environment
 
-#### 1. Data availability node
+### 1. Data availability node
 
-* clone the repo 
+* clone the repo
 
     ``` https://github.com/availproject/avail.git ```
 
@@ -65,7 +65,7 @@ The implementation calls [Submit](https://github.com/availproject/avail-light/bl
 
     ``` cd avail-light-bootstrap ```
 
-* run node 
+* run node
 
     ``` cargo run --release ```
 
@@ -78,7 +78,7 @@ The implementation calls [Submit](https://github.com/availproject/avail-light/bl
 * go to root folder
 
     ``` cd avail-light ```
-     
+
 * create a configuration file ```touch config.yaml``` in the root directory & put following content.
 
     ```
@@ -125,14 +125,13 @@ The implementation calls [Submit](https://github.com/availproject/avail-light/bl
 
     ```
 
-* run node 
+* run node
 
     ``` cargo run --release -- --network local -c config.yaml --clean ```
 
 * generate avail key pair if not configured by adding the following seed phrase in ```identity.toml``` in root directory
 
     ``` avail_secret_seed_phrase = 'bottom drive obey lake curtain smoke basket hold race lonely fit walk//Alice' ```
-
 
 ## Building your soverign rollup
 
@@ -141,11 +140,11 @@ Now that you have a da node and light client running, we are ready to build and 
 * go to the root directory and install rollkit by adding the following lines to go.mod
 
     ``` 
-    replace github.com/cosmos/cosmos-sdk => github.com/rollkit/cosmos-sdk v0.50.1-rollkit-v0.11.9-no-fraud-proofs 
+    replace github.com/cosmos/cosmos-sdk => github.com/rollkit/cosmos-sdk v0.50.1-rollkit-v0.11.9-no-fraud-proofs
 
     ```
     and run 
-
+  
     ```
     go mod tidy
 
@@ -153,14 +152,14 @@ Now that you have a da node and light client running, we are ready to build and 
 
 * start your rollup
     
-    create one script file (init-local.sh) in root folder
+  create one script file (init-local.sh) in root folder
 
-    ``` 
-    touch init-local.sh
+  ``` 
+  touch init-local.sh
 
-    ```
+  ```
 
-    add the following script to the script file (init-local.sh) or you can get the script from [here](https://gist.github.com/chandiniv1/27397b93e08e2c40e7e1b746f13e5d7b)
+  add the following script to the script file (init-local.sh) or you can get the script from [here](https://gist.github.com/chandiniv1/27397b93e08e2c40e7e1b746f13e5d7b)
 
 
     
@@ -439,6 +438,5 @@ Now that you have a da node and light client running, we are ready to build and 
     total: "1"
   
   ```
-
 
 With this You've built a local rollup that posts to a local avail light node
