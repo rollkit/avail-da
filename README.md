@@ -81,7 +81,7 @@ The implementation calls [Submit](https://github.com/availproject/avail-light/bl
 
 * create a configuration file ```touch config.yaml``` in the root directory & put following content.
 
-    ```
+    ```yaml
     http_server_host = '127.0.0.1'
     http_server_port = 8000
     port = 38000
@@ -140,12 +140,14 @@ Now that you have a da node and light client running, we are ready to build and 
 * go to the root directory and install rollkit by adding the following lines to go.mod
 
     ```
+
     replace github.com/cosmos/cosmos-sdk => github.com/rollkit/cosmos-sdk v0.50.1-rollkit-v0.11.9-no-fraud-proofs
 
     ```
   and run
   
     ```
+
     go mod tidy
 
     ```
@@ -160,7 +162,7 @@ Now that you have a da node and light client running, we are ready to build and 
   ```
 
   add the following script to the script file (init-local.sh) or you can get the script from [here](https://gist.github.com/chandiniv1/27397b93e08e2c40e7e1b746f13e5d7b)
- 
+
 * to make use of avail as a da layer,
 
   * clone the repo
@@ -210,7 +212,7 @@ Now that you have a da node and light client running, we are ready to build and 
   gmd tx bank send [from_key_or_address] [to_address] [amount] [flags]
 
   ```
-  ex: 
+  ex:
 
   ```
 
@@ -269,12 +271,14 @@ Now that you have a da node and light client running, we are ready to build and 
   you can query the tx using using
 
   ```
+
   gmd q tx <hash>
 
   ```
   ex:
 
   ```
+
   gmd q tx 130EA420F2373C88F6191E1D203CEF272B666BE283316A17BC8B02FBABCBA1C9
 
   ```
@@ -282,6 +286,7 @@ Now that you have a da node and light client running, we are ready to build and 
   then you'll see
 
   ```
+
   code: 0
   codespace: ""
   data:   12260A242F636F736D6F732E62616E6B2E763162657461312E4D736753656E64526573706F6E736  5
@@ -403,16 +408,16 @@ Now that you have a da node and light client running, we are ready to build and 
   txhash: 130EA420F2373C88F6191E1D203CEF272B666BE283316A17BC8B02FBABCBA1C9
 
 
-  ``` 
+  ```
 
-  then query the bank balances 
+  then query the bank balances
 
   ```
   gmd query bank balances gm1ffdft5ku0qw67eypavgyltjqj54yraaa4uj8pl
 
   ```
 
-  you can see 
+  you can see
 
   ```
   balances:
@@ -426,9 +431,11 @@ Now that you have a da node and light client running, we are ready to build and 
   query the balance of other key
 
   ```
+
   gmd query bank balances gm1r4g9lleykkw6mjdpmp6e0tgusymh4sa2swcw69
 
   ```
+
   you can see
 
   ```
