@@ -46,8 +46,9 @@ type DataTransactions struct {
 
 // Config represents the configuration structure.
 type Config struct {
-	AppID uint32 `json:"app_ID"`
-	LcURL string `json:"lc_url"`
+	AppID             uint32 `json:"app_ID"`
+	LcURL             string `json:"lc_url"`
+	GRPCServerAddress string `json:"grpc_server_address"`
 }
 
 // BlockURL represents the URL pattern for retrieving data and extrinsic information
