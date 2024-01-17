@@ -139,7 +139,7 @@ Now that you have a da node and light client running, we are ready to build and 
 
 * go to the root directory and install rollkit by adding the following lines to go.mod
 
-    ``` 
+    ```
     replace github.com/cosmos/cosmos-sdk => github.com/rollkit/cosmos-sdk v0.50.1-rollkit-v0.11.9-no-fraud-proofs
 
     ```
@@ -163,22 +163,22 @@ Now that you have a da node and light client running, we are ready to build and 
  
 * to make use of avail as a da layer,
 
-    * clone the repo
+  * clone the repo
 
-      ``` git clone https://github.com/rollkit/avail-da.git ```
+    ``` git clone https://github.com/rollkit/avail-da.git ```
 
-    * checkout to the branch(since it hasn't merged with main)
+  * checkout to the branch(since it hasn't merged with main)
 
-      ``` git checkout chandini/avail-da ```
+    ``` git checkout chandini/avail-da ```
 
-    * run the server
+  * run the server
 
-      ``` go run ./cmd/avail-da/main.go ```
+    ``` go run ./cmd/avail-da/main.go ```
 
-    note: make sure that port address(serving avail-da) must be the ```rollkit.da_address``` in the [script file](https://gist.github.com/chandiniv1/27397b93e08e2c40e7e1b746f13e5d7b)
+  note: make sure that port address(serving avail-da) must be the ```rollkit.da_address``` in the [script file](https://gist.github.com/chandiniv1/27397b93e08e2c40e7e1b746f13e5d7b)
 
 * run the rollup chain
-    
+
     go to root of the gm repo and run
 
     ```
@@ -205,15 +205,18 @@ Now that you have a da node and light client running, we are ready to build and 
 
 * Now we can test by sending the transaction by sending amount from one account to another
   
-  ``` 
+  ```
+
   gmd tx bank send [from_key_or_address] [to_address] [amount] [flags]
 
   ```
   ex: 
 
   ```
+
    gmd tx bank send gm1ffdft5ku0qw67eypavgyltjqj54yraaa4uj8pl gm1r4g9lleykkw6mjdpmp6e0tgusymh4sa2swcw69 11stake --chain-id gm --keyring-backend test
-   ```
+
+  ```
 
   You'll be prompted to accept the transaction:
 
