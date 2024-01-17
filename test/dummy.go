@@ -9,11 +9,13 @@ import (
 	"time"
 )
 
+// BlocksResponse represents the structure of a response containing blocks information.
 type BlocksResponse struct {
 	BlockNumber      uint32             `json:"block_number"`
 	DataTransactions []DataTransactions `json:"data_transactions"`
 }
 
+// DataTransactions represents data transactions within the block.
 type DataTransactions struct {
 	Data      string `json:"data"`
 	Extrinsic string `json:"extrinsic"`
