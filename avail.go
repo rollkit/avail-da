@@ -32,13 +32,13 @@ type SubmitResponse struct {
 	TransactionIndex uint32 `json:"index"`
 }
 
-// BlocksResponse represents the structure of a response containing block information.
+// BlocksResponse represents the structure of a response containing blocks information.
 type BlocksResponse struct {
 	BlockNumber      uint32             `json:"block_number"`
 	DataTransactions []DataTransactions `json:"data_transactions"`
 }
 
-// DataTransactions represents data transactions within a block.
+// DataTransactions represents data transactions within the block.
 type DataTransactions struct {
 	Data      string `json:"data"`
 	Extrinsic string `json:"extrinsic"`
@@ -53,7 +53,7 @@ type Config struct {
 // BlockURL represents the URL pattern for retrieving data and extrinsic information
 const BlockURL = "/blocks/%d/data?fields=data,extrinsic"
 
-// BlockNotFound represents the string indicating that a block is not found.
+// BLOCK_NOT_FOUND represents the string indicating that a block is not found.
 const BLOCK_NOT_FOUND = "\"Not found\""
 
 // PROCESSING_BLOCK represents the string indicating that a block is still being processed.

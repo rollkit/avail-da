@@ -151,6 +151,7 @@ func mockSubmitEndpoint(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// StartMockServer starts a mock server for testing purpose
 func StartMockServer() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/v2/blocks/", mockGetEndpoint)

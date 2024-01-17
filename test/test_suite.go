@@ -32,6 +32,7 @@ type Blob = da.Blob
 // ID is a type alias
 type ID = da.ID
 
+// BasicDATest tests round trip of messages to DA and back.
 func BasicDATest(t *testing.T, da da.DA) {
 	msg1 := []byte("MockedData")
 	msg2 := []byte("MockedData2")
@@ -71,12 +72,14 @@ func BasicDATest(t *testing.T, da da.DA) {
 	assert.Contains(t, proofs, []byte("mocked_transaction_hash2"))
 }
 
+// CheckErrors ensures that errors are handled properly by DA.
 func CheckErrors(t *testing.T, da da.DA) {
 	blob, err := da.Get([]ID{[]byte("invalid")})
 	assert.Error(t, err)
 	assert.Empty(t, blob)
 }
 
+// GetIDsTest tests iteration over DA
 func GetIDsTest(t *testing.T, da da.DA) {
 	msg1 := []byte("MockedData")
 	msg2 := []byte("MockedData2")
@@ -112,6 +115,7 @@ func GetIDsTest(t *testing.T, da da.DA) {
 	assert.Contains(t, allBlobs, msg2)
 }
 
+// ConcurrentReadWriteTest tests the use of mutex lock in DummyDA by calling separate methods that use `d.data` and making sure there's no race conditions.
 func ConcurrentReadWriteTest(t *testing.T, da da.DA) {
 	var wg sync.WaitGroup
 	wg.Add(2)

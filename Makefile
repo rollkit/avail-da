@@ -60,22 +60,10 @@ vet:
 .PHONY: vet
 
 ## test: Running unit tests
-# test: vet
-# 	@echo "--> Running unit tests"
-# 	@go test -v -race -covermode=atomic -coverprofile=coverage.txt $(pkgs) -run $(run) -count=$(count)
-# .PHONY: test
-
-## test: Running all tests
 test: vet
-	@echo "--> Running all tests"
-	@go test -v -race -covermode=atomic -coverprofile=coverage.txt $(all_pkgs) -run $(run) -count=$(count)
-.PHONY: test
-
-## test: Running unit tests
-test-unit: vet
 	@echo "--> Running unit tests"
-	@go test -v -race -covermode=atomic -coverprofile=coverage.txt $(unit_pkgs) -run $(run) -count=$(count)
-.PHONY: test-unit
+	@go test -v -race -covermode=atomic -coverprofile=coverage.txt $(pkgs) -run $(run) -count=$(count)
+.PHONY: test
 
 ### proto-gen: Generate protobuf files. Requires docker.
 #proto-gen:
