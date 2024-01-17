@@ -139,14 +139,15 @@ Now that you have a da node and light client running, we are ready to build and 
 
 * go to the root directory and install rollkit by adding the following lines to go.mod
 
-    ```
+    ```text
 
     replace github.com/cosmos/cosmos-sdk => github.com/rollkit/cosmos-sdk v0.50.1-rollkit-v0.11.9-no-fraud-proofs
 
     ```
+
   and run
   
-    ```
+    ```text
 
     go mod tidy
 
@@ -156,7 +157,7 @@ Now that you have a da node and light client running, we are ready to build and 
 
   create one script file (init-local.sh) in root folder
 
-  ```
+  ```text
   touch init-local.sh
 
   ```
@@ -183,7 +184,7 @@ Now that you have a da node and light client running, we are ready to build and 
 
     go to root of the gm repo and run
 
-    ```
+    ```text
     bash init-local.sh
 
     ```
@@ -194,7 +195,7 @@ Now that you have a da node and light client running, we are ready to build and 
   
   You should see an output like the following
 
-  ```
+  ```text
   - address: gm1ffdft5ku0qw67eypavgyltjqj54yraaa4uj8pl
     name: gm-key-2
     pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"AiRf1Vxwcuunu1yjPpSUPxW85Q9NhM1y0Dg3ozOEGUto"}'
@@ -207,14 +208,15 @@ Now that you have a da node and light client running, we are ready to build and 
 
 * Now we can test by sending the transaction by sending amount from one account to another
   
-  ```
+  ```text
 
   gmd tx bank send [from_key_or_address] [to_address] [amount] [flags]
 
   ```
+
   ex:
 
-  ```
+  ```text
 
    gmd tx bank send gm1ffdft5ku0qw67eypavgyltjqj54yraaa4uj8pl gm1r4g9lleykkw6mjdpmp6e0tgusymh4sa2swcw69 11stake --chain-id gm --keyring-backend test
 
@@ -222,7 +224,7 @@ Now that you have a da node and light client running, we are ready to build and 
 
   You'll be prompted to accept the transaction:
 
-  ```
+  ```text
   auth_info:
   fee:
     amount: []
@@ -250,7 +252,7 @@ Now that you have a da node and light client running, we are ready to build and 
 
   Type y if you'd like to confirm and sign the transaction. Then, you'll see the confirmation:
 
-  ```
+  ```text
   confirm transaction before signing and broadcasting [y/N]: y
   code: 0
   codespace: ""
@@ -270,14 +272,15 @@ Now that you have a da node and light client running, we are ready to build and 
 
   you can query the tx using using
 
-  ```
+  ```text
 
   gmd q tx <hash>
 
   ```
+
   ex:
 
-  ```
+  ```text
 
   gmd q tx 130EA420F2373C88F6191E1D203CEF272B666BE283316A17BC8B02FBABCBA1C9
 
@@ -285,7 +288,7 @@ Now that you have a da node and light client running, we are ready to build and 
 
   then you'll see
 
-  ```
+  ```text
 
   code: 0
   codespace: ""
@@ -412,14 +415,16 @@ Now that you have a da node and light client running, we are ready to build and 
 
   then query the bank balances
 
-  ```
+  ```text
+
   gmd query bank balances gm1ffdft5ku0qw67eypavgyltjqj54yraaa4uj8pl
 
   ```
 
   you can see
 
-  ```
+  ```text
+
   balances:
   - amount: "9999999999999999999999989"
     denom: stake
@@ -430,7 +435,7 @@ Now that you have a da node and light client running, we are ready to build and 
 
   query the balance of other key
 
-  ```
+  ```text
 
   gmd query bank balances gm1r4g9lleykkw6mjdpmp6e0tgusymh4sa2swcw69
 
@@ -438,7 +443,7 @@ Now that you have a da node and light client running, we are ready to build and 
 
   you can see
 
-  ```
+  ```text
   balances:
   - amount: "10000000000000000000000011"
     denom: stake
