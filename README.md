@@ -143,7 +143,7 @@ Now that you have a da node and light client running, we are ready to build and 
     replace github.com/cosmos/cosmos-sdk => github.com/rollkit/cosmos-sdk v0.50.1-rollkit-v0.11.9-no-fraud-proofs
 
     ```
-    and run 
+  and run
   
     ```
     go mod tidy
@@ -151,18 +151,16 @@ Now that you have a da node and light client running, we are ready to build and 
     ```
 
 * start your rollup
-    
+
   create one script file (init-local.sh) in root folder
 
-  ``` 
+  ```
   touch init-local.sh
 
   ```
 
   add the following script to the script file (init-local.sh) or you can get the script from [here](https://gist.github.com/chandiniv1/27397b93e08e2c40e7e1b746f13e5d7b)
-
-
-    
+ 
 * to make use of avail as a da layer,
 
     * clone the repo
