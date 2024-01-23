@@ -1,0 +1,5 @@
+{
+    "lc_url" : "http://localhost:8000/v2",
+    "app_ID":1,
+    "grpc_server_address": "127.0.0.1:3000"
+}
