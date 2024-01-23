@@ -184,7 +184,6 @@ func (c *AvailDA) Get(ids []da.ID) ([]da.Blob, error) {
 		if err != nil {
 			return nil, err
 		}
-		time.Sleep(10 * time.Second)
 		req, err := http.NewRequest("GET", parsedURL.String(), nil)
 		if err != nil {
 			return nil, err
@@ -208,6 +207,7 @@ func (c *AvailDA) Get(ids []da.ID) ([]da.Blob, error) {
 		if string(responseData) == BLOCK_NOT_FOUND {
 			blocksObject = BlocksResponse{BlockNumber: blockNumber, DataTransactions: []DataTransactions{}}
 		} else if string(responseData) == PROCESSING_BLOCK {
+			time.Sleep(10 * time.Second)
 			goto Loop
 		} else {
 			err = json.Unmarshal(responseData, &blocksObject)

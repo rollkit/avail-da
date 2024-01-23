@@ -5,7 +5,7 @@ go 1.21.1
 toolchain go1.21.5
 
 require (
-	github.com/rollkit/go-da v0.0.0-20231024133951-57bc36006772
+	github.com/rollkit/go-da v0.0.0-20231207150926-93600f28d67d
 	github.com/stretchr/testify v1.8.4
 	google.golang.org/grpc v1.59.0
 )
@@ -23,4 +23,3 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/rollkit/go-da => github.com/rollkit/go-da v0.0.0-20231207150926-93600f28d67d
