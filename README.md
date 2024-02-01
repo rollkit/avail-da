@@ -172,7 +172,7 @@ Now that you have a da node and light client running, we are ready to build and 
   
   * Go to the root dir
   
-      ```cd avail-da```
+    ``` cd avail-da ```
 
   * run the server
 
