@@ -170,9 +170,9 @@ Now that you have a da node and light client running, we are ready to build and 
 
     ``` git clone https://github.com/rollkit/avail-da.git ```
 
-  * checkout to the branch(since it hasn't merged with main)
-
-    ``` git checkout chandini/avail-da ```
+ * Go to the root folder
+  
+      ```cd avail-da```
 
   * run the server
 
