@@ -50,7 +50,7 @@ The implementation calls [Submit](https://github.com/availproject/avail-light/bl
 * go to root folder
 
     ``` cd avail ```
-
+  
 * run node
 
     ``` cargo run --locked --release -- --dev ```
