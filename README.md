@@ -51,6 +51,10 @@ The implementation calls [Submit](https://github.com/availproject/avail-light/bl
 
     ``` cd avail ```
 
+* checkout to the following branch
+
+    ``` git checkout v1.9.0.3 ```
+
 * run node
 
     ``` cargo run --locked --release -- --dev ```
