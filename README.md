@@ -51,6 +51,10 @@ The implementation calls [Submit](https://github.com/availproject/avail-light/bl
 
     ``` cd avail ```
 
+* checkout to the following branch
+
+    ``` git checkout v1.9.0.3 ```
+
 * run node
 
     ``` cargo run --locked --release -- --dev ```
@@ -169,10 +173,10 @@ Now that you have a da node and light client running, we are ready to build and 
   * clone the repo
 
     ``` git clone https://github.com/rollkit/avail-da.git ```
-
-  * checkout to the branch(since it hasn't merged with main)
-
-    ``` git checkout chandini/avail-da ```
+  
+  * Go to the root dir
+  
+    ``` cd avail-da ```
 
   * run the server
 
