@@ -1,33 +1,20 @@
 reviewers:
   defaults:
-    - code-owners
+    - rollkit
   groups:
-    code-owners:
+    rollkit:
       - Manav-Aggarwal
       - tzdybal
       - gupadhyaya
-    rollkit:
-      - Manav-Aggarwal
-      - S1nus
       - tuxcanfly
-    devops:
-      - smuu
-      - sysrex
-      - jrmanes
-      - Bidon15
       - MSevey
     celestia:
       - team:celestia
 files:
   "**":
-    - code-owners
     - rollkit
-  "**/*Dockerfile":
-    - code-owners
-    - devops
   ".github/**":
-    - code-owners
-    - devops
+    - rollkit
 options:
   ignore_draft: true
   ignored_keywords:
