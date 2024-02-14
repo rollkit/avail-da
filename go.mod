@@ -5,7 +5,7 @@ go 1.21.1
 toolchain go1.21.5
 
 require (
-	github.com/rollkit/go-da v0.0.0-20231207150926-93600f28d67d
+	github.com/rollkit/go-da v0.4.0
 	github.com/stretchr/testify v1.8.4
 	google.golang.org/grpc v1.61.0
 )
