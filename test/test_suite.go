@@ -42,7 +42,9 @@ func BasicDATest(t *testing.T, da da.DA) {
 	expID1 := make([]byte, 8)
 	binary.BigEndian.PutUint32(expID1, 42)
 
+	assert.GreaterOrEqual(t, len(id1), 1)
 	assert.Equal(t, id1[0], expID1)
+	assert.GreaterOrEqual(t, len(proof1), 1)
 	assert.Equal(t, proof1[0], []byte("mocked_transaction_hash"))
 
 	id2, proof2, err := da.Submit([]Blob{msg2})
@@ -51,7 +53,9 @@ func BasicDATest(t *testing.T, da da.DA) {
 	expID2 := make([]byte, 8)
 	binary.BigEndian.PutUint32(expID2, 43)
 
+	assert.GreaterOrEqual(t, len(id2), 1)
 	assert.Equal(t, id2[0], expID2)
+	assert.GreaterOrEqual(t, len(proof2), 1)
 	assert.Equal(t, proof2[0], []byte("mocked_transaction_hash2"))
 
 	ret, err := da.Get(id1)
