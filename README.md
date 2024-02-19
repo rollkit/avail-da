@@ -137,7 +137,7 @@ The implementation calls [Submit](https://github.com/availproject/avail-light/bl
 
     ``` avail_secret_seed_phrase = 'bottom drive obey lake curtain smoke basket hold race lonely fit walk//Alice' ```
 
-## Building your soverign rollup
+## Building your sovereign rollup
 
 Now that you have a da node and light client running, we are ready to build and run our Cosmos-SDK blockchain (here we have taken [gm application](https://rollkit.dev/tutorials/gm-world))
 
