@@ -7,7 +7,7 @@ toolchain go1.21.5
 require (
 	github.com/rollkit/go-da v0.0.0-20231207150926-93600f28d67d
 	github.com/stretchr/testify v1.8.4
-	google.golang.org/grpc v1.61.0
+	google.golang.org/grpc v1.61.1
 )
 
 require (
