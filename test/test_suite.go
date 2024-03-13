@@ -1,6 +1,7 @@
 package dummy
 
 import (
+	"context"
 	"encoding/binary"
 	"sync"
 	"testing"
@@ -34,9 +35,10 @@ type ID = da.ID
 
 // BasicDATest tests round trip of messages to DA and back.
 func BasicDATest(t *testing.T, da da.DA) {
+	ctx := context.TODO()
 	msg1 := []byte("MockedData")
 	msg2 := []byte("MockedData2")
-	id1, proof1, err := da.Submit([]Blob{msg1})
+	id1, err := da.Submit(ctx, []Blob{msg1}, -1, nil)
 	assert.NoError(t, err)
 
 	expID1 := make([]byte, 8)
@@ -44,10 +46,8 @@ func BasicDATest(t *testing.T, da da.DA) {
 
 	assert.GreaterOrEqual(t, len(id1), 1)
 	assert.Equal(t, id1[0], expID1)
-	assert.GreaterOrEqual(t, len(proof1), 1)
-	assert.Equal(t, proof1[0], []byte("mocked_transaction_hash"))
 
-	id2, proof2, err := da.Submit([]Blob{msg2})
+	id2, err := da.Submit(ctx, []Blob{msg2}, -1, nil)
 	assert.NoError(t, err)
 
 	expID2 := make([]byte, 8)
@@ -55,36 +55,35 @@ func BasicDATest(t *testing.T, da da.DA) {
 
 	assert.GreaterOrEqual(t, len(id2), 1)
 	assert.Equal(t, id2[0], expID2)
-	assert.GreaterOrEqual(t, len(proof2), 1)
-	assert.Equal(t, proof2[0], []byte("mocked_transaction_hash2"))
 
-	ret, err := da.Get(id1)
+	ret, err := da.Get(ctx, id1, nil)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, ret)
 	assert.Equal(t, []Blob{msg1}, ret)
 
-	ret, err = da.Get(id2)
+	ret, err = da.Get(ctx, id2, nil)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, ret)
 	assert.Equal(t, []Blob{msg2}, ret)
 
-	ids, proofs, err := da.Submit([]Blob{msg1, msg2})
+	ids, err := da.Submit(ctx, []Blob{msg1, msg2}, -1, nil)
 	assert.NoError(t, err)
 	assert.Contains(t, ids, expID1)
 	assert.Contains(t, ids, expID2)
-	assert.Contains(t, proofs, []byte("mocked_transaction_hash"))
-	assert.Contains(t, proofs, []byte("mocked_transaction_hash2"))
 }
 
 // CheckErrors ensures that errors are handled properly by DA.
 func CheckErrors(t *testing.T, da da.DA) {
-	blob, err := da.Get([]ID{[]byte("invalid")})
+	ctx := context.TODO()
+	blob, err := da.Get(ctx, []ID{[]byte("invalid")}, nil)
 	assert.Error(t, err)
 	assert.Empty(t, blob)
 }
 
 // GetIDsTest tests iteration over DA
 func GetIDsTest(t *testing.T, da da.DA) {
+	ctx := context.TODO()
+
 	msg1 := []byte("MockedData")
 	msg2 := []byte("MockedData2")
 
@@ -94,12 +93,10 @@ func GetIDsTest(t *testing.T, da da.DA) {
 	expID2 := make([]byte, 8)
 	binary.BigEndian.PutUint32(expID2, 43)
 
-	ids, proofs, err := da.Submit([]Blob{msg1, msg2})
+	ids, err := da.Submit(ctx, []Blob{msg1, msg2}, -1, nil)
 	assert.NoError(t, err)
 	assert.Contains(t, ids, expID1)
 	assert.Contains(t, ids, expID2)
-	assert.Contains(t, proofs, []byte("mocked_transaction_hash"))
-	assert.Contains(t, proofs, []byte("mocked_transaction_hash2"))
 
 	var height [][]byte
 	var i uint64
@@ -107,11 +104,11 @@ func GetIDsTest(t *testing.T, da da.DA) {
 	var allBlobs [][]byte
 
 	for i = 42; i < 44; i++ {
-		height, err = da.GetIDs(i)
+		height, err = da.GetIDs(ctx, i, nil)
 		if err != nil {
 			t.Error("failed to get height:", err)
 		}
-		blobs, err := da.Get(height)
+		blobs, err := da.Get(ctx, height, nil)
 		assert.NoError(t, err)
 		allBlobs = append(allBlobs, blobs...)
 	}
@@ -121,13 +118,15 @@ func GetIDsTest(t *testing.T, da da.DA) {
 
 // ConcurrentReadWriteTest tests the use of mutex lock in DummyDA by calling separate methods that use `d.data` and making sure there's no race conditions.
 func ConcurrentReadWriteTest(t *testing.T, da da.DA) {
+	ctx := context.TODO()
+
 	var wg sync.WaitGroup
 	wg.Add(2)
 
 	go func() {
 		defer wg.Done()
 		for i := uint64(1); i <= 100; i++ {
-			_, err := da.GetIDs(i)
+			_, err := da.GetIDs(ctx, i, nil)
 			assert.NoError(t, err)
 		}
 	}()
@@ -135,7 +134,7 @@ func ConcurrentReadWriteTest(t *testing.T, da da.DA) {
 	go func() {
 		defer wg.Done()
 		for i := uint64(1); i <= 100; i++ {
-			_, _, err := da.Submit([][]byte{[]byte("MockedData")})
+			_, err := da.Submit(ctx, [][]byte{[]byte("MockedData")}, -1, nil)
 			assert.NoError(t, err)
 		}
 	}()

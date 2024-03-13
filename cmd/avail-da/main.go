@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/rollkit/avail-da"
-	"github.com/rollkit/go-da/proxy"
+	"github.com/rollkit/go-da/proxy-grpc"
 )
 
 func main() {
