@@ -166,7 +166,7 @@ Now that you have a da node and light client running, we are ready to build and 
 
   ```
 
-  add the following script to the script file (init-local.sh) or you can get the script from [here](https://gist.github.com/chandiniv1/27397b93e08e2c40e7e1b746f13e5d7b)
+  add the following script to the script file (init-local.sh) or you can get the script from [here](https://gist.github.com/chandiniv1/3e2d05eaf339404083fc7467e7233d8f)
 
 * to make use of avail as a da layer,
 
