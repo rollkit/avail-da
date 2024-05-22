@@ -4,7 +4,6 @@ run:
 
 linters:
   enable:
-    - deadcode
     - errcheck
     - gofmt
     - goimports
@@ -15,16 +14,14 @@ linters:
     - misspell
     - revive
     - staticcheck
-    - structcheck
     - typecheck
     - unused
-    - varcheck
 
 issues:
   exclude-use-default: false
   include:
-    - EXC0012  # EXC0012 revive: Annoying issue about not having a comment.
-    - EXC0014  # EXC0014 revive: Annoying issue about not having a comment.
+    - EXC0012 # EXC0012 revive: Annoying issue about not having a comment.
+    - EXC0014 # EXC0014 revive: Annoying issue about not having a comment.
 
 linters-settings:
   revive:
