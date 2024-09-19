@@ -13,19 +13,19 @@ The Avail DA implementation connects to a local [Avail-light-node](https://githu
 
 ## Implementation
 
-The implementation calls the corresponding Avail [node api docs](https://github.com/availproject/avail-light/blob/main/src/api/v2/README.md) methods.
+The implementation calls the corresponding Avail [node api docs](https://github.com/availproject/avail-light/tree/main/client#api) methods.
 
 ### Get
 
 Get retrieves blobs referred to by their ids.
 
-The implementation calls [Get](https://github.com/availproject/avail-light/blob/main/src/api/v2/README.md#get-v2blocksblock_numberdatafieldsdataextrinsic) endpoint on the Avail-light-node API.
+The implementation calls [Get](https://docs.availproject.org/api-reference/avail-lc-api/v2-blocks-header-datafields) endpoint on the Avail-light-node API.
 
 ### Submit
 
 Submit submits blobs and returns their ids and proofs.
 
-The implementation calls [Submit](https://github.com/availproject/avail-light/blob/main/src/api/v2/README.md#post-v2submit) endpoint on the Avail-light-node API.
+The implementation calls [Submit](https://docs.availproject.org/api-reference/avail-lc-api/v2-submit) endpoint on the Avail-light-node API.
 
 ## Installation & Setup
 
