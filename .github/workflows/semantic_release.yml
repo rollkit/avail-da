@@ -15,8 +15,8 @@ jobs:
         # yamllint disable rule:line-length
         # Work around for non npm project
         # REF: https://github.com/cycjimmy/semantic-release-action/issues/115#issuecomment-1817264419
-        # yamllint enable rule:line-length
         run: echo '{"branches":[],"plugins":["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/github"]}' > .releaserc.json
+        # yamllint enable rule:line-length
       - name: Create Release
         uses: cycjimmy/semantic-release-action@v4
         env:
